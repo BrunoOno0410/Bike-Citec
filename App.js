@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { LoginForm } from "./screens/login";
-//import { CreateUser } from "./screens/createUser";
+import { AccountCreateForm, CreateUser } from "./screens/createUser";
 import { HomeScreen } from "./screens/home";
 
 const Stack = createNativeStackNavigator();
@@ -26,9 +26,9 @@ export default function App() {
           headerShown: false,
         }}
       >
+        <Stack.Screen name="CreateUser" component={AccountCreateForm} />
         <Stack.Screen name="Login" component={LoginForm} />
         <Stack.Screen name="Home" component={HomeScreen} />
-        {/* <Stack.Screen name="CreateUser" component={CreateUser} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

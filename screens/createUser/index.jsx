@@ -2,10 +2,16 @@ import React, { Component, useState } from "react";
 import { View, Text, TextInput, Button, Image } from "react-native";
 import { styles } from "./styles";
 
-export class LoginForm extends Component {
+export class AccountCreateForm extends Component {
   state = {
+    name: "",
     email: "",
     password: "",
+    confirmPassword: "",
+  };
+
+  handleNameChange = (text) => {
+    this.setState({ name: text });
   };
 
   handleEmailChange = (text) => {
@@ -15,10 +21,15 @@ export class LoginForm extends Component {
   handlePasswordChange = (text) => {
     this.setState({ password: text });
   };
+  handleConfirmPasswordChange = (text) => {
+    this.setState({ confirmPassword: text });
+  };
 
   handleSubmit = () => {
+    console.log("Nome:", this.state.name);
     console.log("Email:", this.state.email);
-    console.log("Senha:", this.state.name);
+    console.log("Senha:", this.state.password);
+    console.log("Confirmar Senha:", this.state.confirmPassword);
   };
 
   render() {
@@ -32,12 +43,16 @@ export class LoginForm extends Component {
           <Text>{"\n"}</Text>
         </View>
         <View>
-          <Text style={styles.textView}>Seja bem vindo!</Text>
-          <Text>{"\n"}</Text>
-          <Text style={styles.textView}>Que bom ter você aqui.</Text>
-          <Text>{"\n"}</Text>
+          <Text style={styles.textView}>Crie sua conta</Text>
         </View>
         <View>
+          <Text style={styles.textView}>Nome:</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={this.handleNameChange}
+            value={this.state.name}
+          />
+
           <Text style={styles.textView}>Email:</Text>
           <TextInput
             style={styles.textInput}
@@ -52,12 +67,14 @@ export class LoginForm extends Component {
             value={this.state.password}
           />
 
-          <Button title="Entrar" onPress={this.handleSubmit} />
+          <Text style={styles.textView}>Confirmar Senha:</Text>
+          <TextInput
+            style={styles.textInput}
+            onChangeText={this.handleConfirmPasswordChange}
+            value={this.state.confirmPassword}
+          />
+          <Button title="Criar conta" onPress={this.handleSubmit} />
           <Text>{"\n"}</Text>
-          <Text style={styles.textView}>Esqueceu sua senha?</Text>
-          <Text style={{ color: "white", textDecorationLine: "underline" }}>
-            Primeira vez? Crie uma conta
-          </Text>
         </View>
       </View>
     );
