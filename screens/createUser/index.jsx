@@ -1,13 +1,5 @@
 import React, { Component, useState } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  Image,
-  Touchable,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TextInput, Image, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
 
 export class AccountCreateForm extends Component {
