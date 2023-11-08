@@ -58,7 +58,7 @@ export class LoginForm extends Component {
           </View>
 
           <TouchableOpacity style={styles.forgotPassword}>
-            Esqueceu sua senha?
+            <Text style={styles.textView}>Esqueceu sua senha?</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.loginButton}
