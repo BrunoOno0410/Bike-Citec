@@ -19,6 +19,13 @@ export const styles = StyleSheet.create({
     height: 75,
     marginBottom: 20,
   },
+  backgroundImage: {
+    flex: 1,
+    resizeMode: "cover",
+    justifyContent: "center",
+    alignItems: "center",
+    width: "100%",
+  },
   textView: {
     color: "white",
     fontSize: 16,
