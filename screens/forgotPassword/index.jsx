@@ -11,27 +11,29 @@ import { styles } from "./styles";
 import Logo from "../../assets/logo.png";
 import Background from "../../assets/background.png";
 
-export class LoginForm extends Component {
+export class AccountPasswordChangeForm extends Component {
   state = {
     email: "",
-    password: "",
+    newPassword: "",
+    confirmPassword: "",
   };
-
-  constructor(props) {
-    super(props);
-  }
 
   handleEmailChange = (text) => {
     this.setState({ email: text });
   };
 
-  handlePasswordChange = (text) => {
-    this.setState({ password: text });
+  handleNewPasswordChange = (text) => {
+    this.setState({ newPassword: text });
+  };
+
+  handleConfirmPasswordChange = (text) => {
+    this.setState({ confirmPassword: text });
   };
 
   handleSubmit = () => {
     console.log("Email:", this.state.email);
-    console.log("Senha:", this.state.password);
+    console.log("Senha nova:", this.state.newPassword);
+    console.log("Confirmar Senha:", this.state.confirmPassword);
   };
 
   render() {
@@ -42,9 +44,7 @@ export class LoginForm extends Component {
             <Image style={styles.logo} source={Logo} />
           </View>
           <View>
-            <Text style={styles.brandTitle}>
-              Seja bem vindo! {"\n"} Que bom ter você aqui
-            </Text>
+            <Text style={styles.brandTitle}>Esqueceu sua senha?</Text>
           </View>
           <View style={styles.box}>
             <View style={styles.inputContainer}>
@@ -57,35 +57,29 @@ export class LoginForm extends Component {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.textView}>Senha</Text>
+              <Text style={styles.textView}>Nova senha</Text>
               <TextInput
                 secureTextEntry={true}
                 style={styles.textInput}
-                onChangeText={this.handlePasswordChange}
-                value={this.state.password}
+                onChangeText={this.handleNewPasswordChange}
+                value={this.state.newPassword}
               />
             </View>
 
-            <TouchableOpacity style={styles.forgotPassword}>
-              <Text
-                style={styles.textView}
-                onPress={() => this.props.navigation.navigate("ForgotPassword")}
-              >
-                Esqueceu sua senha?
-              </Text>
-            </TouchableOpacity>
+            <View style={styles.inputContainer}>
+              <Text style={styles.textView}>Confirmar Senha</Text>
+              <TextInput
+                secureTextEntry={true}
+                style={styles.textInput}
+                onChangeText={this.handleConfirmPasswordChange}
+                value={this.state.confirmPassword}
+              />
+            </View>
             <TouchableOpacity
               style={styles.loginButton}
               onPress={this.handleSubmit}
             >
-              <Text style={styles.buttonText}>Entrar</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={{ color: "white", textDecorationLine: "underline" }}
-              onPress={() => this.props.navigation.navigate("CreateUser")}
-            >
-              <Text style={styles.textView}>Primeira vez? Crie uma conta</Text>
+              <Text style={styles.buttonText}>RECUPERAR SENHA</Text>
             </TouchableOpacity>
           </View>
         </ImageBackground>
