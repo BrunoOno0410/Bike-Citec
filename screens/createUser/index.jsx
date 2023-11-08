@@ -1,5 +1,13 @@
 import React, { Component, useState } from "react";
-import { View, Text, TextInput, Button, Image } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  Image,
+  Touchable,
+  TouchableOpacity,
+} from "react-native";
 import { styles } from "./styles";
 
 export class AccountCreateForm extends Component {
@@ -40,41 +48,54 @@ export class AccountCreateForm extends Component {
             style={styles.logo}
             source={require("../../assets/logo.png")}
           />
-          <Text>{"\n"}</Text>
         </View>
         <View>
-          <Text style={styles.textView}>Crie sua conta</Text>
+          <Text style={styles.brandTitle}>Crie sua conta</Text>
         </View>
-        <View>
-          <Text style={styles.textView}>Nome:</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={this.handleNameChange}
-            value={this.state.name}
-          />
+        <View style={styles.box}>
+          <View style={styles.inputContainer}>
+            <Text style={styles.textView}>Nome</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={this.handleNameChange}
+              value={this.state.name}
+            />
+          </View>
 
-          <Text style={styles.textView}>Email:</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={this.handleEmailChange}
-            value={this.state.email}
-          />
+          <View style={styles.inputContainer}>
+            <Text style={styles.textView}>Email</Text>
+            <TextInput
+              style={styles.textInput}
+              onChangeText={this.handleEmailChange}
+              value={this.state.email}
+            />
+          </View>
 
-          <Text style={styles.textView}>Senha:</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={this.handlePasswordChange}
-            value={this.state.password}
-          />
+          <View style={styles.inputContainer}>
+            <Text style={styles.textView}>Senha</Text>
+            <TextInput
+              secureTextEntry={true}
+              style={styles.textInput}
+              onChangeText={this.handlePasswordChange}
+              value={this.state.password}
+            />
+          </View>
 
-          <Text style={styles.textView}>Confirmar Senha:</Text>
-          <TextInput
-            style={styles.textInput}
-            onChangeText={this.handleConfirmPasswordChange}
-            value={this.state.confirmPassword}
-          />
-          <Button title="Criar conta" onPress={this.handleSubmit} />
-          <Text>{"\n"}</Text>
+          <View style={styles.inputContainer}>
+            <Text style={styles.textView}>Confirmar Senha</Text>
+            <TextInput
+              secureTextEntry={true}
+              style={styles.textInput}
+              onChangeText={this.handleConfirmPasswordChange}
+              value={this.state.confirmPassword}
+            />
+          </View>
+          <TouchableOpacity
+            style={styles.loginButton}
+            onPress={this.handleSubmit}
+          >
+            <Text style={styles.buttonText}>CRIAR CONTA</Text>
+          </TouchableOpacity>
         </View>
       </View>
     );

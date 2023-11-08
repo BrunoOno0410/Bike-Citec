@@ -26,8 +26,8 @@ export default function App() {
           headerShown: false,
         }}
       >
-        <Stack.Screen name="CreateUser" component={AccountCreateForm} />
         <Stack.Screen name="Login" component={LoginForm} />
+        <Stack.Screen name="CreateUser" component={AccountCreateForm} />
         <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>

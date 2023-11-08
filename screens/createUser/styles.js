@@ -7,6 +7,13 @@ export const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  box: {
+    width: "100%",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  inputContainer: {},
   logo: {
     width: 75,
     height: 75,
@@ -14,16 +21,24 @@ export const styles = StyleSheet.create({
   },
   textView: {
     color: "white",
+    fontSize: 16,
+  },
+  brandTitle: {
+    color: "white",
+    fontSize: 32,
+    marginBottom: 30,
   },
   textInput: {
     color: "white",
-    borderRadius: 25,
+    borderRadius: 4,
     borderColor: "white",
-    borderWidth: 1,
-    height: 30,
-    padding: 10,
-    marginLeft: 20,
+    borderWidth: 2,
+    width: "70%",
+    minWidth: 300,
+    paddingVertical: 8,
+    paddingHorizontal: 10,
     marginBottom: 10,
+    fontSize: 16,
   },
   forgotButton: {
     height: 30,
@@ -31,18 +46,19 @@ export const styles = StyleSheet.create({
   },
   loginButton: {
     width: "70%",
-    backgroundColor: "#1c313a",
-    borderRadius: 25,
+    //backgroundColor: "#3FC43F",
+    backgroundColor: "#00FF00", //TODO remove this
+    borderRadius: 4,
     height: 50,
     alignItems: "center",
     justifyContent: "center",
     marginTop: 40,
     marginBottom: 10,
   },
-  createAccountButton: {
-    width: "50%",
-  },
-  loginText: {
-    color: "white",
+  buttonText: {
+    color: "black",
+    fontWeight: "500",
+    fontSize: 16,
+    letterSpacing: 1.2,
   },
 });
