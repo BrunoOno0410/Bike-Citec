@@ -7,6 +7,11 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     backgroundColor: "#fff",
   },
+  mapContainer: {
+    flex: 1,
+    width: "100%",
+    height: "100%",
+  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

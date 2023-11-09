@@ -76,7 +76,9 @@ export class LoginForm extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.loginButton}
-              onPress={this.handleSubmit}
+              //onPress={this.handleSubmit}
+              //TODO VALIDAR LOGIN
+              onPress={() => this.props.navigation.navigate("HomeScreen")}
             >
               <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>

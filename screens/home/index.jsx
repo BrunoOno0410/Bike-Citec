@@ -1,32 +1,35 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-//import MapView, { Marker } from "react-native-maps";
+// import MapView, { Marker } from "react-native-maps";
 import { styles } from "./styles";
 
-export class HomeScreen extends Component {
+export class HomeScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      initialRegion: {
-        latitude: -23.5489,
-        longitude: -46.6388,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
-      },
-    };
+
+    // this.state = {
+    //   region: {
+    //     latitude: 37.78825,
+    //     longitude: -122.4324,
+    //     latitudeDelta: 0.0922,
+    //     longitudeDelta: 0.0421,
+    //   },
+    // };
+
+    // this.onRegionChange = this.onRegionChange.bind(this);
   }
+
+  // onRegionChange(region) {
+  //   this.setState({ region });
+  // }
 
   render() {
     // return (
-    //   <View style={styles.container}>
-    //     <MapView style={{ flex: 1 }} initialRegion={this.state.initialRegion}>
-    //       <Marker
-    //         coordinate={{ latitude: -23.5489, longitude: -46.6388 }}
-    //         title="Você está aqui"
-    //         description="Localização do usuário de bicicleta"
-    //       />
-    //     </MapView>
-    //   </View>
+    //   // <MapView
+    //   //   region={this.state.region}
+    //   //   onRegionChange={this.onRegionChange}
+    //   //   style={styles.mapContainer}
+    //   // />
     // );
   }
 }
