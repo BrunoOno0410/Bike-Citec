@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
 
 import { LoginForm } from "./screens/login";
-import { AccountCreateForm, CreateUser } from "./screens/createUser";
+import { AccountCreateForm } from "./screens/createUser";
 import { HomeScreen } from "./screens/home";
 import { AccountPasswordChangeForm } from "./screens/forgotPassword";
 
@@ -18,12 +18,12 @@ export default function App() {
         }}
       >
         <Stack.Screen name="Login" component={LoginForm} />
+        <Stack.Screen name="HomeScreen" component={HomeScreen} />
         <Stack.Screen name="CreateUser" component={AccountCreateForm} />
         <Stack.Screen
           name="ForgotPassword"
           component={AccountPasswordChangeForm}
         />
-        <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
