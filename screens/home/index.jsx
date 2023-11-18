@@ -1,11 +1,39 @@
-import React, { Component } from "react";
-import { View } from "react-native";
-import MapView from "react-native-maps";
+import React from "react";
+import { View, Alert, TextInput } from "react-native";
+import MapView, { Marker, Callout } from "react-native-maps";
+import * as Location from "expo-location";
 import { styles } from "./styles";
 
 export class HomeScreen extends React.Component {
-  constructor(props) {
-    super(props);
+  watchId = null;
+
+  state = {
+    location: null,
+  };
+
+  async componentDidMount() {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      Alert.alert("Permission to access location was denied");
+      return;
+    }
+
+    this.watchId = await Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 1000,
+        distanceInterval: 1,
+      },
+      (location) => {
+        this.setState({ location });
+      }
+    );
+  }
+
+  componentWillUnmount() {
+    if (this.watchId) {
+      this.watchId.remove();
+    }
   }
 
   render() {
@@ -187,20 +215,36 @@ export class HomeScreen extends React.Component {
         ],
       },
     ];
+    const { location } = this.state;
 
     return (
-      <View style={styles.container}>
-        <MapView
-          style={styles.map}
-          loadingEnabled={true}
-          customMapStyle={mapStyle}
-          region={{
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }}
-        />
+      <View style={{ flex: 1 }}>
+        {location && (
+          <MapView
+            style={styles.map}
+            loadingEnabled={true}
+            customMapStyle={mapStyle}
+            initialRegion={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          >
+            <Marker
+              coordinate={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+              title="Minha localização"
+            />
+          </MapView>
+        )}
+        <Callout>
+          <View style={styles.calloutView}>
+            <TextInput style={styles.calloutSearch} placeholder={"Search"} />
+          </View>
+        </Callout>
       </View>
     );
   }
