@@ -1,6 +1,7 @@
 import React from "react";
 import { View, Alert, TextInput } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
+import MapViewDirections from "react-native-maps-directions";
 import * as Location from "expo-location";
 import { styles } from "./styles";
 
@@ -237,6 +238,13 @@ export class HomeScreen extends React.Component {
                 longitude: location.coords.longitude,
               }}
               title="Minha localização"
+            />
+            <MapViewDirections
+              origin={location.coords}
+              destination={{ latitude: -23.5505, longitude: -46.6333 }} // Exemplo de destino
+              apikey={"AIzaSyAjb_wb7Y9qXSMuoenjjfAJ99frBwkapSM"}
+              strokeWidth={3}
+              strokeColor="hotpink"
             />
           </MapView>
         )}
