@@ -55,6 +55,9 @@ web-build/
 *.key
 *.mobileprovision
 
+# Environment variables
+.env
+
 # Metro
 .metro-health-check*
 

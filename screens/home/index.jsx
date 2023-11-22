@@ -2,14 +2,17 @@ import React from "react";
 import { View, Alert, TextInput } from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from "expo-location";
 import { styles } from "./styles";
+import { GOOGLE_MAPS_APIKEY } from "@env";
 
 export class HomeScreen extends React.Component {
   watchId = null;
 
   state = {
     location: null,
+    destination: null,
   };
 
   async componentDidMount() {
@@ -36,6 +39,15 @@ export class HomeScreen extends React.Component {
       this.watchId.remove();
     }
   }
+
+  handleSelectDestination = (data, details) => {
+    if (details.geometry) {
+      const { location } = details.geometry;
+      this.setState({
+        destination: { latitude: location.lat, longitude: location.lng },
+      });
+    }
+  };
 
   render() {
     mapStyle = [
@@ -239,18 +251,36 @@ export class HomeScreen extends React.Component {
               }}
               title="Minha localização"
             />
-            <MapViewDirections
-              origin={location.coords}
-              destination={{ latitude: -23.5505, longitude: -46.6333 }} // Exemplo de destino
-              apikey={"AIzaSyAjb_wb7Y9qXSMuoenjjfAJ99frBwkapSM"}
-              strokeWidth={3}
-              strokeColor="hotpink"
-            />
+            {location && this.state.destination && (
+              <MapViewDirections
+                origin={location.coords}
+                destination={this.state.destination}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={3}
+                strokeColor="hotpink"
+              />
+            )}
           </MapView>
         )}
         <Callout>
           <View style={styles.calloutView}>
-            <TextInput style={styles.calloutSearch} placeholder={"Search"} />
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              fetchDetails={true}
+              onPress={(data, details = null) => {
+                // 'details' is provided when fetchDetails = true
+                this.setState({
+                  destination: {
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                  },
+                });
+              }}
+              query={{
+                key: GOOGLE_MAPS_APIKEY,
+                language: "pt-br",
+              }}
+            />
           </View>
         </Callout>
       </View>
