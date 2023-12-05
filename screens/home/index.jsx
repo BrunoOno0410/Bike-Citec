@@ -13,14 +13,13 @@ import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from "expo-location";
 import { styles } from "./styles";
-import { GOOGLE_MAPS_APIKEY } from "@env";
+import { GOOGLE_MAPS_APIKEY, OPENWEATHERMAP_API_KEY } from "@env";
 import { Speedometer } from "../../components/speedometer/speedometer";
 import BotaoPesquisa from "../../assets/botaopesquisa.png";
 
 export class HomeScreen extends React.Component {
   watchId = null;
 
-  //TODO - Refatorar para usar o hook useRef
   constructor(props) {
     super(props);
     this.searchRef = React.createRef();
@@ -30,6 +29,37 @@ export class HomeScreen extends React.Component {
     location: null,
     destination: null,
     modalVisible: false,
+    temperature: null,
+    weather: null,
+    humidity: null,
+  };
+
+  updateWeather = () => {
+    if (this.state.location) {
+      const { latitude, longitude } = this.state.location;
+
+      fetch(
+        `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid={1a7cd3764008259161f0aeb18f361382}`
+      )
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          this.setState({
+            temperature: data.main.temp,
+            weather: data.weather[0].main,
+            humidity: data.main.humidity,
+          });
+        })
+        .catch((error) =>
+          console.error(
+            "There was a problem with the fetch operation: " + error.message
+          )
+        );
+    }
   };
 
   async componentDidMount() {
@@ -51,6 +81,7 @@ export class HomeScreen extends React.Component {
         this.setState({ location, speed: speedKmH });
       }
     );
+    this.updateWeather();
   }
 
   componentWillUnmount() {
@@ -261,6 +292,7 @@ export class HomeScreen extends React.Component {
       <View style={{ flex: 1 }}>
         {location && (
           <MapView
+            showsCompass={false}
             style={styles.map}
             loadingEnabled={true}
             customMapStyle={mapStyle}
@@ -290,6 +322,19 @@ export class HomeScreen extends React.Component {
           </MapView>
         )}
         <Speedometer speed={this.state.speed} />
+        <View style={styles.weatherView}>
+          <Text style={styles.weatherText}>
+            {this.state.temperature && this.state.temperature.toFixed(1)}
+            {"°C"}
+          </Text>
+          <Text style={styles.weatherText}>
+            {this.state.weather && this.state.weather}
+          </Text>
+          <Text style={styles.weatherText}>
+            {this.state.humidity && this.state.humidity.toFixed(0)}
+            {"%"}
+          </Text>
+        </View>
         <TouchableOpacity
           style={styles.searchButton}
           onPress={this.handleClick}
@@ -300,9 +345,6 @@ export class HomeScreen extends React.Component {
           animationType="slide"
           transparent={true}
           visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-          }}
         >
           <View
             style={{

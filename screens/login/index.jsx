@@ -10,11 +10,12 @@ import {
 import { styles } from "./styles";
 import Logo from "../../assets/logo.png";
 import Background from "../../assets/background.png";
+import axios from "axios";
 
 export class LoginForm extends Component {
   state = {
     email: "",
-    password: "",
+    senha: "",
   };
 
   constructor(props) {
@@ -26,12 +27,37 @@ export class LoginForm extends Component {
   };
 
   handlePasswordChange = (text) => {
-    this.setState({ password: text });
+    this.setState({ senha: text });
   };
 
-  handleSubmit = () => {
-    console.log("Email:", this.state.email);
-    console.log("Senha:", this.state.password);
+  handleLogin = async () => {
+    const { email, senha } = this.state;
+
+    // Verifique se email e senha foram fornecidos
+    if (!email || !senha) {
+      console.error("Email e senha são necessários");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://10.0.2.2:3001/login", {
+        email,
+        senha,
+      });
+
+      console.log(response.data);
+      if (response.data.message === "Login bem-sucedido") {
+        this.props.navigation.navigate("HomeScreen");
+      } else {
+        console.error("Credenciais inválidas");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 401) {
+        console.error("Credenciais inválidas");
+      } else {
+        console.error(error);
+      }
+    }
   };
 
   render() {
@@ -62,7 +88,7 @@ export class LoginForm extends Component {
                 secureTextEntry={true}
                 style={styles.textInput}
                 onChangeText={this.handlePasswordChange}
-                value={this.state.password}
+                value={this.state.senha}
               />
             </View>
 
@@ -76,9 +102,7 @@ export class LoginForm extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.loginButton}
-              //onPress={this.handleSubmit}
-              //TODO VALIDAR LOGIN
-              onPress={() => this.props.navigation.navigate("HomeScreen")}
+              onPress={this.handleLogin}
             >
               <Text style={styles.buttonText}>Entrar</Text>
             </TouchableOpacity>

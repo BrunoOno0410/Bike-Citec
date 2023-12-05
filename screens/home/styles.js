@@ -68,4 +68,19 @@ export const styles = StyleSheet.create({
     height: 38,
     borderRadius: 50,
   },
+  weatherView: {
+    position: "absolute",
+    top: 300,
+    left: 10,
+    height: "25%",
+    width: "15%",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 10,
+  },
+  weatherText: {
+    color: "white",
+    fontSize: 12,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
 });
