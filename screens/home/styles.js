@@ -41,10 +41,10 @@ export const styles = StyleSheet.create({
   calloutView: {
     flexDirection: "row",
     borderRadius: 10,
-    width: "100%",
-    marginLeft: "30%",
-    marginRight: "30%",
-    marginTop: 40,
+    height: 50,
+    width: "80%",
+    marginTop: 15,
+    backgroundColor: "yellow",
   },
   calloutSearch: {
     borderColor: "transparent",
@@ -54,5 +54,18 @@ export const styles = StyleSheet.create({
     marginRight: 10,
     height: 40,
     borderWidth: 0.0,
+  },
+  searchButton: {
+    position: "absolute",
+    bottom: 45,
+    right: 10,
+  },
+  modalView: {
+    justifyContent: "center",
+    backgroundColor: "white",
+    marginTop: 15,
+    paddingHorizontal: 10,
+    height: 38,
+    borderRadius: 50,
   },
 });

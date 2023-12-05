@@ -1,18 +1,35 @@
-import React from "react";
-import { View, Alert, TextInput } from "react-native";
+import React, { createRef } from "react";
+import {
+  View,
+  Alert,
+  Image,
+  TouchableHighlight,
+  Modal,
+  Text,
+  TouchableOpacity,
+} from "react-native";
 import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import * as Location from "expo-location";
 import { styles } from "./styles";
 import { GOOGLE_MAPS_APIKEY } from "@env";
+import { Speedometer } from "../../components/speedometer/speedometer";
+import BotaoPesquisa from "../../assets/botaopesquisa.png";
 
 export class HomeScreen extends React.Component {
   watchId = null;
 
+  //TODO - Refatorar para usar o hook useRef
+  constructor(props) {
+    super(props);
+    this.searchRef = React.createRef();
+  }
+
   state = {
     location: null,
     destination: null,
+    modalVisible: false,
   };
 
   async componentDidMount() {
@@ -29,7 +46,9 @@ export class HomeScreen extends React.Component {
         distanceInterval: 1,
       },
       (location) => {
-        this.setState({ location });
+        const speed = location.coords.speed; // velocidade em metros por segundo
+        const speedKmH = speed * 3.6; // velocidade em km/h
+        this.setState({ location, speed: speedKmH });
       }
     );
   }
@@ -47,6 +66,14 @@ export class HomeScreen extends React.Component {
         destination: { latitude: location.lat, longitude: location.lng },
       });
     }
+  };
+
+  setModalVisible(visible) {
+    this.setState({ modalVisible: visible });
+  }
+
+  handleClick = () => {
+    this.setModalVisible(true);
   };
 
   render() {
@@ -257,16 +284,63 @@ export class HomeScreen extends React.Component {
                 destination={this.state.destination}
                 apikey={GOOGLE_MAPS_APIKEY}
                 strokeWidth={3}
-                strokeColor="hotpink"
+                strokeColor="lime"
               />
             )}
           </MapView>
         )}
-        <Callout>
-          <View style={styles.calloutView}>
+        <Speedometer speed={this.state.speed} />
+        <TouchableOpacity
+          style={styles.searchButton}
+          onPress={this.handleClick}
+        >
+          <Image source={BotaoPesquisa} />
+        </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+          }}
+        >
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+            }}
+          >
+            <View style={styles.modalView}>
+              <TouchableHighlight
+                onPress={() => {
+                  this.setModalVisible(!this.state.modalVisible);
+                }}
+              >
+                <Text>Hide</Text>
+              </TouchableHighlight>
+            </View>
             <GooglePlacesAutocomplete
               placeholder="Search"
               fetchDetails={true}
+              textInputProps={{
+                placeholderTextColor: "white",
+              }}
+              styles={{
+                textInput: {
+                  marginTop: 15,
+                  marginLeft: 10,
+                  backgroundColor: "transparent",
+                  borderWidth: 2,
+                  borderColor: "white",
+                  height: 38,
+                  color: "white",
+                  fontSize: 16,
+                },
+                listView: {
+                  marginLeft: 10,
+                },
+              }}
               onPress={(data, details = null) => {
                 // 'details' is provided when fetchDetails = true
                 this.setState({
@@ -275,6 +349,7 @@ export class HomeScreen extends React.Component {
                     longitude: details.geometry.location.lng,
                   },
                 });
+                this.setModalVisible(!this.state.modalVisible);
               }}
               query={{
                 key: GOOGLE_MAPS_APIKEY,
@@ -282,7 +357,7 @@ export class HomeScreen extends React.Component {
               }}
             />
           </View>
-        </Callout>
+        </Modal>
       </View>
     );
   }
