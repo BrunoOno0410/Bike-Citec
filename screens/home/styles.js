@@ -73,7 +73,8 @@ export const styles = StyleSheet.create({
     top: 300,
     left: 10,
     height: "25%",
-    width: "15%",
+    width: "18%",
+    justifyContent: "space-evenly",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     borderRadius: 10,
   },
@@ -82,5 +83,10 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: "bold",
     textAlign: "center",
+  },
+  weatherIcon: {
+    width: 30,
+    height: 30,
+    alignSelf: "center",
   },
 });
