@@ -1,5 +1,3 @@
-import { passwordBD } from "@env";
-
 const express = require("express");
 const bodyParser = require("body-parser");
 const mysql = require("mysql");
@@ -13,7 +11,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "34.39.139.12",
   user: "root",
-  password: passwordBD,
+  password: "12345678",
   database: "citec",
 });
 

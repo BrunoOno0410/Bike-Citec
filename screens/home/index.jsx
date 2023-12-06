@@ -321,7 +321,7 @@ export const HomeScreen = () => {
           </Text>
           <Text style={styles.weatherText}>{temp.precip} mm/hr 🌧</Text>
           <Text style={styles.weatherText}>
-            {(parseInt(temp.uv) / 11) * 100}% ☀️
+            {(parseInt(temp.uv) / 11).toFixed(2) * 100}% ☀️
           </Text>
         </View>
       )}
