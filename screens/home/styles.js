@@ -89,4 +89,13 @@ export const styles = StyleSheet.create({
     height: 30,
     alignSelf: "center",
   },
+  menuDropdown: {
+    position: "absolute",
+    top: 45,
+    right: 10,
+    width: "18%",
+    justifyContent: "space-evenly",
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    borderRadius: 10,
+  },
 });

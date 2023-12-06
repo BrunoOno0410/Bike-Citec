@@ -7,7 +7,10 @@ import {
   Modal,
   Text,
   TouchableOpacity,
+  Button,
 } from "react-native";
+import { Menu } from "react-native-paper";
+import { Provider as PaperProvider } from "react-native-paper";
 import MapView, { Marker, Callout } from "react-native-maps";
 import MapViewDirections from "react-native-maps-directions";
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
@@ -16,10 +19,10 @@ import { styles } from "./styles";
 import { GOOGLE_MAPS_APIKEY, OPENWEATHERMAP_API_KEY } from "@env";
 import { Speedometer } from "../../components/speedometer/speedometer";
 import BotaoPesquisa from "../../assets/botaopesquisa.png";
-import axios from "axios";
 import { axiosWeatherInstance } from "../../axios";
+import axios from "axios";
 
-export const HomeScreen = () => {
+export const HomeScreen = ({ navigation }) => {
   let watchId = null;
 
   const [icon, setIcon] = useState();
@@ -28,6 +31,10 @@ export const HomeScreen = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [temp, setTemp] = useState();
   const [speed, setSpeed] = useState();
+  const [visible, setVisible] = useState(false);
+
+  const openMenu = () => setVisible(true);
+  const closeMenu = () => setVisible(false);
 
   useEffect(() => {
     (async () => {
@@ -41,7 +48,7 @@ export const HomeScreen = () => {
       setLocation(location);
       axiosWeatherInstance
         .get(
-          `?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=b3366e73ebde4ded8e3a25636e4371c2&lang=pt`
+          `?lat=${location.coords.latitude}&lon=${location.coords.longitude}&key=0d743fc7028a4b46ac4def37b823bded&lang=pt`
         )
         .then((response) => {
           setIcon(response.data.data[0].weather.icon);
@@ -273,111 +280,124 @@ export const HomeScreen = () => {
   ];
 
   return (
-    <View style={{ flex: 1 }}>
-      {location && (
-        <MapView
-          showsCompass={false}
-          style={styles.map}
-          loadingEnabled={true}
-          customMapStyle={mapStyle}
-          initialRegion={{
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        >
-          <Marker
-            coordinate={{
+    <PaperProvider>
+      <View style={{ flex: 1 }}>
+        {location && (
+          <MapView
+            showsCompass={false}
+            style={styles.map}
+            loadingEnabled={true}
+            customMapStyle={mapStyle}
+            initialRegion={{
               latitude: location.coords.latitude,
               longitude: location.coords.longitude,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
             }}
-            title="Minha localização"
-          />
-          {location && destination && (
-            <MapViewDirections
-              origin={location.coords}
-              destination={destination}
-              apikey={GOOGLE_MAPS_APIKEY}
-              strokeWidth={3}
-              strokeColor="lime"
+          >
+            <Marker
+              coordinate={{
+                latitude: location.coords.latitude,
+                longitude: location.coords.longitude,
+              }}
+              title="Minha localização"
             />
-          )}
-        </MapView>
-      )}
-      <Speedometer speed={speed} />
-      {temp && (
-        <View style={styles.weatherView}>
-          <Text style={styles.weatherText}>{temp.temp}°C</Text>
-          <Image
-            style={styles.weatherIcon}
-            source={{
-              uri: `https://www.weatherbit.io/static/img/icons/${temp.weather.icon}.png`,
-            }}
-          />
-          <Text style={styles.weatherText}>{temp.rh}% 💧</Text>
-          <Text style={styles.weatherText}>
-            {temp.wind_spd.toFixed(1)} m/s 💨
-          </Text>
-          <Text style={styles.weatherText}>{temp.precip} mm/hr 🌧</Text>
-          <Text style={styles.weatherText}>
-            {(parseInt(temp.uv) / 11).toFixed(2) * 100}% ☀️
-          </Text>
+            {location && destination && (
+              <MapViewDirections
+                origin={location.coords}
+                destination={destination}
+                apikey={GOOGLE_MAPS_APIKEY}
+                strokeWidth={3}
+                strokeColor="lime"
+              />
+            )}
+          </MapView>
+        )}
+        <View style={styles.menuDropdown}>
+          <Menu
+            visible={visible}
+            onDismiss={closeMenu}
+            anchor={<Button title="Show menu" onPress={openMenu} />}
+          >
+            <Menu.Item title={<Text>Configurações ⚙</Text>} />
+            <Menu.Item title={<Text>Perfil 🙍‍♂️</Text>} />
+            <Menu.Item title={<Text>Loja 💰</Text>} />
+          </Menu>
         </View>
-      )}
-      <TouchableOpacity style={styles.searchButton} onPress={handleClick}>
-        <Image source={BotaoPesquisa} />
-      </TouchableOpacity>
-      <Modal animationType="slide" transparent={true} visible={modalVisible}>
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-          }}
-        >
-          <View style={styles.modalView}>
-            <TouchableHighlight onPress={toggleModalVisible}>
-              <Text>Voltar</Text>
-            </TouchableHighlight>
+        <Speedometer speed={speed} />
+        {temp && (
+          <View style={styles.weatherView}>
+            <Text style={styles.weatherText}>{temp.temp}°C</Text>
+            <Image
+              style={styles.weatherIcon}
+              source={{
+                uri: `https://www.weatherbit.io/static/img/icons/${temp.weather.icon}.png`,
+              }}
+            />
+            <Text style={styles.weatherText}>{temp.rh}% 💧</Text>
+            <Text style={styles.weatherText}>
+              {temp.wind_spd.toFixed(1)} m/s 💨
+            </Text>
+            <Text style={styles.weatherText}>{temp.precip} mm/hr 🌧</Text>
+            <Text style={styles.weatherText}>
+              {parseInt(temp.uv).toFixed(0)} UV ☀️
+            </Text>
           </View>
-          <GooglePlacesAutocomplete
-            placeholder="Search"
-            fetchDetails={true}
-            textInputProps={{
-              placeholderTextColor: "white",
+        )}
+        <TouchableOpacity style={styles.searchButton} onPress={handleClick}>
+          <Image source={BotaoPesquisa} />
+        </TouchableOpacity>
+        <Modal animationType="slide" transparent={true} visible={modalVisible}>
+          <View
+            style={{
+              flex: 1,
+              flexDirection: "row",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
             }}
-            styles={{
-              textInput: {
-                marginTop: 15,
-                marginLeft: 10,
-                backgroundColor: "transparent",
-                borderWidth: 2,
-                borderColor: "white",
-                height: 38,
-                color: "white",
-                fontSize: 16,
-              },
-              listView: {
-                marginLeft: 10,
-              },
-            }}
-            onPress={(data, details = null) => {
-              if (details) {
-                setDestination({
-                  latitude: details.geometry.location.lat,
-                  longitude: details.geometry.location.lng,
-                });
-              }
-              toggleModalVisible();
-            }}
-            query={{
-              key: GOOGLE_MAPS_APIKEY,
-              language: "pt-br",
-            }}
-          />
-        </View>
-      </Modal>
-    </View>
+          >
+            <View style={styles.modalView}>
+              <TouchableHighlight onPress={toggleModalVisible}>
+                <Text>Voltar</Text>
+              </TouchableHighlight>
+            </View>
+            <GooglePlacesAutocomplete
+              placeholder="Search"
+              fetchDetails={true}
+              textInputProps={{
+                placeholderTextColor: "white",
+              }}
+              styles={{
+                textInput: {
+                  marginTop: 15,
+                  marginLeft: 10,
+                  backgroundColor: "transparent",
+                  borderWidth: 2,
+                  borderColor: "white",
+                  height: 38,
+                  color: "white",
+                  fontSize: 16,
+                },
+                listView: {
+                  marginLeft: 10,
+                },
+              }}
+              onPress={(data, details = null) => {
+                if (details) {
+                  setDestination({
+                    latitude: details.geometry.location.lat,
+                    longitude: details.geometry.location.lng,
+                  });
+                }
+                toggleModalVisible();
+              }}
+              query={{
+                key: GOOGLE_MAPS_APIKEY,
+                language: "pt-br",
+              }}
+            />
+          </View>
+        </Modal>
+      </View>
+    </PaperProvider>
   );
 };
